@@ -314,7 +314,7 @@ void KeyboardController::process_boot_keyboard_format(const uint8_t *report, boo
 	for (int i=2; i < 8; i++) {
 		uint32_t key = prev_report_[i];
 		if (key >= 4 && !contains(key, report)) {
-			key_release(prev_report_[0], key);
+			key_release(modifiers_, key);
 			if (rawKeyReleasedFunction) {
 				rawKeyReleasedFunction(key);
 			}
@@ -333,7 +333,7 @@ void KeyboardController::process_boot_keyboard_format(const uint8_t *report, boo
 	for (int i=2; i < 8; i++) {
 		uint32_t key = report[i];
 		if (key >= 4 && !contains(key, prev_report_)) {
-			key_press(report[0], key);
+			key_press(modifiers_, key);
 			if (rawKeyPressedFunction) {
 				rawKeyPressedFunction(key);
 			}
@@ -452,7 +452,9 @@ void KeyboardController::hid_input_begin(uint32_t topusage, uint32_t type, int l
 void KeyboardController::hid_input_data(uint32_t usage, int32_t value)
 {
 	// Hack ignore 0xff00 high words as these are user values... 
+	#ifdef USBHOST_PRINT_DEBUG
 	USBHDBGSerial.printf("KeyboardController: topusage= %x usage=%X, value=%d\n", topusage_, usage, value);
+	#endif
 	if ((usage & 0xffff0000) == 0xff000000) return; 
 	// If this is the TOPUSAGE_KEYBOARD do in it's own function
 	if (process_hid_keyboard_data(usage, value))
