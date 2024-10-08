@@ -314,7 +314,7 @@ void KeyboardController::process_boot_keyboard_format(const uint8_t *report, boo
 	for (int i=2; i < 8; i++) {
 		uint32_t key = prev_report_[i];
 		if (key >= 4 && !contains(key, report)) {
-			key_release(modifiers_, key);
+			key_release(keyboard_uses_boot_format_ ? report[0]: modifiers_, key);
 			if (rawKeyReleasedFunction) {
 				rawKeyReleasedFunction(key);
 			}
@@ -333,7 +333,7 @@ void KeyboardController::process_boot_keyboard_format(const uint8_t *report, boo
 	for (int i=2; i < 8; i++) {
 		uint32_t key = report[i];
 		if (key >= 4 && !contains(key, prev_report_)) {
-			key_press(modifiers_, key);
+			key_press(keyboard_uses_boot_format_ ? report[0]: modifiers_, key);
 			if (rawKeyPressedFunction) {
 				rawKeyPressedFunction(key);
 			}
