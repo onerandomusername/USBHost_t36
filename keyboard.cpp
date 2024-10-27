@@ -533,14 +533,14 @@ bool KeyboardController::process_hid_keyboard_data(uint32_t usage, int32_t value
 		uint8_t keybit = 1 << usage;
 		if (value) {
 			if (!(modifiers_ & keybit))  {
-				if (rawKeyPressedFunction) rawKeyPressedFunction(103 + usage);
 				modifiers_ |= keybit;
+				if (rawKeyPressedFunction) rawKeyPressedFunction(103 + usage);
 			}
 
 		} else {
 			if (modifiers_ & keybit)  {
-				if (rawKeyReleasedFunction) rawKeyReleasedFunction(103 + usage);
 				modifiers_ &= ~keybit;
+				if (rawKeyReleasedFunction) rawKeyReleasedFunction(103 + usage);
 			}
 		}
 
